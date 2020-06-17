@@ -61,7 +61,7 @@ test = allfiles[th:]
 X_train, y_train = make_sample(train)
 X_test, y_test = make_sample(test)
 xy = (X_train, X_test, y_train, y_test)
-print ("data import.")
+print("data import.")
 
 # データの確認
 #print("X_test is:")
@@ -75,9 +75,16 @@ print ("data import.")
 #print(y_train)
 
 
+# データ容量が大きくなった時用のデータ保存処理
+with open("data/Crackdata1_2000.pickle", "wb") as f:
+    pickle.dump(xy, f, protocol=4)
+#with open("data/Crackdata.pickle", "rb") as f2:
+#    CrackData = pickle.load(f2)
+
 # データを保存する（データの名前を「tea_data.npy」としている）
 #np.save("data/tea_data.npy", xy)
 #np.save("data/tea_Debug-data.npy", xy)
-np.save("data/tea_Debug-data1_2000.npy", xy)
+#np.save("data/tea_Debug-data1_2000.npy", xy)
+#np.save("data/tea_Debug-data1_2000.npy", CrackData, protocol=4)
 print("data save.")
 

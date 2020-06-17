@@ -16,6 +16,7 @@ import keras.callbacks as callback
 from sklearn.metrics import f1_score
 from keras.callbacks import Callback
 import csv
+import pickle
 
 # 保存先出力pathの指定
 output_path = "Output/Debug2000data/test1/"
@@ -96,7 +97,10 @@ nb_classes = len(categories)
 # データの読み込み
 #X_train, X_test, y_train, y_test = np.load("data/tea_data.npy", allow_pickle=True)
 #X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data4_200.npy", allow_pickle=True)
-X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data1_2000.npy", allow_pickle=True)
+#X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data1_2000.npy", allow_pickle=True)
+
+with open("data/Crackdata1_2000.pickle", "rb") as f2:
+    X_train, X_test, y_train, y_test = pickle.load(f2)
 
 # データの確認
 #print("X_test is:")

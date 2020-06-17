@@ -14,9 +14,6 @@ import pickle
 root_dir = "data/SDNET2018_edit"
 #root_dir = "data/SDNET2018_DebugTest3_1000"  # 各ディレクトリ500枚ずつ入れたデータ
 
-# データ容量が大きくなった時用の処理
-pickle.dump(xy, open("file", "w"), protocol=4)
-
 # ひび割れのカテゴリ名(ディレクトリ名)
 #categories = ["CD", "UD"]
 categories = ["CD", "UD", "CP", "UP", "CW", "UW"]

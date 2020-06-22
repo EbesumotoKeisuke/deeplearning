@@ -25,6 +25,7 @@ output_path = "Output/Debug2000data/test2_EqualData/"
 # 処理時間の計測開始
 start_time = time.time()
 
+# ---------------------------------------------------------------------------------
 # ディープラーニングモデルの構築
 model = models.Sequential()
 
@@ -94,11 +95,6 @@ model.compile(loss="binary_crossentropy", optimizer=optimizers.RMSprop(lr=1e-4),
 categories = ["CD", "UD", "CP", "UP", "CW", "UW"]
 nb_classes = len(categories)
 
-# データの読み込み
-#X_train, X_test, y_train, y_test = np.load("data/tea_data.npy", allow_pickle=True)
-#X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data4_200.npy", allow_pickle=True)
-#X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data1_2000.npy", allow_pickle=True)
-
 with open("data/Crackdata1_2000_2.pickle", "rb") as f2:
     X_train, X_test, y_train, y_test = pickle.load(f2)
 
@@ -121,7 +117,6 @@ X_test = X_test.astype("float") / 255
 y_train = np_utils.to_categorical(y_train, nb_classes)
 y_test = np_utils.to_categorical(y_test, nb_classes)
 
-
 # ---------------------------------------------------------------------
 # 参考サイト：https://datascience.stackexchange.com/questions/45165/how-to-get-accuracy-f1-precision-and-recall-for-a-keras-model
 # コールバック
@@ -139,7 +134,7 @@ class F1Callback(Callback):
         # 以下チェックポイントなど必要なら書く
 
 # モデルの学習
-model = model.fit(X_train, y_train, epochs=20, batch_size=8, validation_data=(X_test, y_test),  callbacks=[F1Callback(model, X_test, y_test), csv_logger])
+model = model.fit(X_train, y_train, epochs=30, batch_size=8, validation_data=(X_test, y_test),  callbacks=[F1Callback(model, X_test, y_test), csv_logger])
 # ---------------------------------------------------------------------
 
 # 学習結果を変数に格納
@@ -148,17 +143,11 @@ val_acc = model.history['val_acc']
 loss = model.history['loss']
 val_loss = model.history['val_loss']
 
-
 # 学習結果をグラフ表示
 epochs = range(len(acc))
-'''
-count_epochs = 1
-for i in epochs:
-    count_epochs = int(count_epochs + i)
-'''
 plt.plot(epochs, acc, 'bo', label='Training acc')   # 恐らくbは青色、oはサークルマーカー(点)を意味する
 plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.xlim(0, 20)
+plt.xlim(0, 30)
 plt.ylim(0.1, 1)
 plt.title('Training and validation accuracy')
 plt.legend()
@@ -168,14 +157,14 @@ plt.figure()
 
 plt.plot(epochs, loss, 'bo', label='Training loss')
 plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.xlim(0, 20)
+plt.xlim(0, 30)
 plt.ylim(0.1, 1)
 plt.title('Training and validation loss')
 plt.legend()
 plt.savefig(output_path + 'Training-and-validation-loss')
 
 # 学習結果の表示
-for i in range(20):
+for i in range(30):
     print("epochs", i, ", acc:", acc[i], ", val_acc:", val_acc[i], ", loss:", loss[i], ", val_loss:", val_loss[i])
 
 # モデルの保存

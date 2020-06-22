@@ -19,7 +19,7 @@ import csv
 import pickle
 
 # 保存先出力pathの指定
-output_path = "Output/Debug2000data/test1/"
+output_path = "Output/Debug2000data/test2_EqualData/"
 #output_path = "Output/Debug200data/test3_F-measure/"
 
 # 処理時間の計測開始
@@ -99,7 +99,7 @@ nb_classes = len(categories)
 #X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data4_200.npy", allow_pickle=True)
 #X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data1_2000.npy", allow_pickle=True)
 
-with open("data/Crackdata1_2000.pickle", "rb") as f2:
+with open("data/Crackdata1_2000_2.pickle", "rb") as f2:
     X_train, X_test, y_train, y_test = pickle.load(f2)
 
 # データの確認

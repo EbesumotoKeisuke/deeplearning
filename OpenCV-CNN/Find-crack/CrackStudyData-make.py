@@ -11,8 +11,8 @@ import pickle
 
 
 # 画像が保存されているルートディレクトリのパス
-root_dir = "data/SDNET2018_edit"
-#root_dir = "data/SDNET2018_DebugTest3_1000"  # 各ディレクトリ500枚ずつ入れたデータ
+#root_dir = "data/SDNET2018_edit"
+root_dir = "data/SDNET2018_DebugTest5_2000"  # 各ディレクトリ500枚ずつ入れたデータ
 
 # ひび割れのカテゴリ名(ディレクトリ名)
 #categories = ["CD", "UD"]
@@ -76,7 +76,7 @@ print("data import.")
 
 
 # データ容量が大きくなった時用のデータ保存処理
-with open("data/Crackdata1_2000.pickle", "wb") as f:
+with open("data/Crackdata1_2000_2.pickle", "wb") as f:
     pickle.dump(xy, f, protocol=4)
 #with open("data/Crackdata.pickle", "rb") as f2:
 #    CrackData = pickle.load(f2)

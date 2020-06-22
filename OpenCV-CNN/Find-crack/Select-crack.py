@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # 結果保存先出力pathの指定
-output_path = "Output/Debug2000data/test1_FullData/"
+output_path = "Output/Debug2000data/test2_EqualData/"
 
 #保存したモデルの読み込み
 model = model_from_json(open(output_path + 'tea_predict.json').read())
@@ -40,43 +40,43 @@ with open(output_path + 'Analysis-Result.csv', 'a', encoding='utf-8') as f:
         f.write(str(now_time))
         f.write(",")
         f.write(img_path)
-        f.write(",This is the data with cracks in the bridge.\n")
-        print ("This is the data with cracks in the bridge.")
+        f.write(",This is the data with cracks in the bridge(CD)\n")
+        print ("This is the data with cracks in the bridge(CD)")
 
     elif features[0, 1] == 1:
         f.write(str(now_time))
         f.write(",")
         f.write(img_path)
-        f.write(",This is the data without cracks in the bridge.\n")
-        print ("This is the data without cracks in the bridge.")
+        f.write(",This is the data without cracks in the bridge(UD)\n")
+        print ("This is the data without cracks in the bridge(UD)")
 
     elif features[0, 2] == 1:
         f.write(str(now_time))
         f.write(",")
         f.write(img_path)
-        f.write(",This is the data with paint cracks.\n")
-        print ("This is the data with paint cracks.")
+        f.write(",This is the data with paint cracks(CP)\n")
+        print ("This is the data with paint cracks(CP)")
 
     elif features[0, 3] == 1:
         f.write(str(now_time))
         f.write(",")
         f.write(img_path)
-        f.write(",This is the data with no paint cracks.\n")
-        print ("This is the data with no paint cracks.")
+        f.write(",This is the data with no paint cracks(UP)\n")
+        print ("This is the data with no paint cracks(UP)")
 
     elif features[0, 4] == 1:
         f.write(str(now_time))
         f.write(",")
         f.write(img_path)
-        f.write(",This is data with concrete cracks.\n")
-        print ("This is data with concrete cracks.")
+        f.write(",This is data with concrete cracks(CW)\n")
+        print ("This is data with concrete cracks(CW)")
 
     elif features[0, 5] == 1:
         f.write(str(now_time))
         f.write(",")
         f.write(img_path)
-        f.write(",This is the data without cracking of concrete.\n")
-        print ("This is the data without cracking of concrete.")
+        f.write(",This is the data without cracking of concrete(UW)\n")
+        print ("This is the data without cracking of concrete(UW)")
 
     else:
         f.write(str(now_time))

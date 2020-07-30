@@ -12,15 +12,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 from sklearn.metrics import confusion_matrix
-import keras.callbacks as callback
 from sklearn.metrics import f1_score
 from keras.callbacks import Callback
+import keras.callbacks as callback
 import csv
 import pickle
 
 # 保存先出力pathの指定
-output_path = "Output/Debug2000data/test2_EqualData/"
-#output_path = "Output/Debug200data/test3_F-measure/"
+#output_path = "Output/Debug2000data/test2_EqualData/"
+output_path = "Output/Debug200data/test11-32to256-layer7/"
 
 # 処理時間の計測開始
 start_time = time.time()
@@ -30,10 +30,10 @@ start_time = time.time()
 model = models.Sequential()
 
 # 畳み込み層の追加
-model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=(250, 250, 3)))
-model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=(256, 256, 3)))
+#model.add(layers.MaxPooling2D((2, 2)))
 
-model.add(layers.Conv2D(32, (3, 3), activation="relu"))
+model.add(layers.Conv2D(64, (3, 3), activation="relu", input_shape=(256, 256, 3)))
 model.add(layers.MaxPooling2D((2, 2)))
 
 model.add(layers.Conv2D(64, (3, 3), activation="relu"))
@@ -42,14 +42,32 @@ model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Conv2D(128, (3, 3), activation="relu"))
 model.add(layers.MaxPooling2D((2, 2)))
 
+model.add(layers.Conv2D(128, (3, 3), activation="relu"))
+model.add(layers.MaxPooling2D((2, 2)))
+
+model.add(layers.Conv2D(256, (3, 3), activation="relu"))
+model.add(layers.MaxPooling2D((2, 2)))
+
+model.add(layers.Conv2D(256, (3, 3), activation="relu"))
+model.add(layers.MaxPooling2D((2, 2)))
+
+#model.add(layers.Conv2D(256, (3, 3), activation="relu"))
+#model.add(layers.MaxPooling2D((2, 2)))
+
+#model.add(layers.Conv2D(512, (3, 3), activation="relu"))
+#model.add(layers.MaxPooling2D((2, 2)))
+
+#model.add(layers.Conv2D(512, (3, 3), activation="relu"))
+#model.add(layers.MaxPooling2D((2, 2)))
+
+# dropoutの追加
+model.add(layers.Dropout(0.5)) # 0.25でもよい？ 0.5は多いかも
+
 # 二次元配列を一次元配列に整列させる。
 model.add(layers.Flatten())
 
-# dropoutの追加
-model.add(layers.Dropout(0.5))
-
 model.add(layers.Dense(512, activation="relu"))
-model.add(layers.Dense(6, activation="sigmoid"))   # 分類先の種類分設定
+model.add(layers.Dense(6, activation="softmax"))   # 分類先の種類分設定
 
 # モデル構成の確認
 model.summary()
@@ -95,8 +113,13 @@ model.compile(loss="binary_crossentropy", optimizer=optimizers.RMSprop(lr=1e-4),
 categories = ["CD", "UD", "CP", "UP", "CW", "UW"]
 nb_classes = len(categories)
 
-with open("data/Crackdata1_2000_2.pickle", "rb") as f2:
+# データの読み込み
+#X_train, X_test, y_train, y_test = np.load("data/tea_Debug-data4_200.npy", allow_pickle=True)
+
+#データが膨大なときの読み込み
+with open("data/Crackdata3_200_6.pickle", "rb") as f2:
     X_train, X_test, y_train, y_test = pickle.load(f2)
+
 
 # データの確認
 #print("X_test is:")
@@ -127,6 +150,13 @@ class F1Callback(Callback):
         self.X_val = X_val
         self.y_val = y_val
 
+    def _implements_train_batch_hooks(self):
+        return True
+    def _implements_test_batch_hooks(self):
+        return True
+    def _implements_predict_batch_hooks(self):
+        return True
+
     def on_epoch_end(self, epoch, logs):
         pred = self.model.predict(self.X_val)
         f1_val = f1_score(self.y_val, np.round(pred), average='micro')  # averageについて：https://qiita.com/isobe_mochi/items/beb4357d69f6886ac05d
@@ -134,7 +164,7 @@ class F1Callback(Callback):
         # 以下チェックポイントなど必要なら書く
 
 # モデルの学習
-model = model.fit(X_train, y_train, epochs=30, batch_size=8, validation_data=(X_test, y_test),  callbacks=[F1Callback(model, X_test, y_test), csv_logger])
+model = model.fit(X_train, y_train, epochs=40, batch_size=8, validation_data=(X_test, y_test),  callbacks=[F1Callback(model, X_test, y_test), csv_logger])
 # ---------------------------------------------------------------------
 
 # 学習結果を変数に格納
@@ -147,8 +177,8 @@ val_loss = model.history['val_loss']
 epochs = range(len(acc))
 plt.plot(epochs, acc, 'bo', label='Training acc')   # 恐らくbは青色、oはサークルマーカー(点)を意味する
 plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.xlim(0, 30)
-plt.ylim(0.1, 1)
+plt.xlim(0, 40)
+plt.ylim(0, 1)
 plt.title('Training and validation accuracy')
 plt.legend()
 plt.savefig(output_path + 'Training-and-validation-accuracy')
@@ -157,14 +187,14 @@ plt.figure()
 
 plt.plot(epochs, loss, 'bo', label='Training loss')
 plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.xlim(0, 30)
-plt.ylim(0.1, 1)
+plt.xlim(0, 40)
+plt.ylim(0, 1)
 plt.title('Training and validation loss')
 plt.legend()
 plt.savefig(output_path + 'Training-and-validation-loss')
 
 # 学習結果の表示
-for i in range(30):
+for i in range(40):
     print("epochs", i, ", acc:", acc[i], ", val_acc:", val_acc[i], ", loss:", loss[i], ", val_loss:", val_loss[i])
 
 # モデルの保存
